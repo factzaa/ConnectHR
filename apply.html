@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ใบสมัครงานออนไลน์ · Job Application</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <img src="icons/logo.png" class="brand-logo" alt="โลโก้">
+    <div>
+    <h1 id="company">ใบสมัครงาน</h1>
+    <div class="sub">กรอกข้อมูลให้ครบถ้วนแล้วกดส่งใบสมัคร · Fill in and submit</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="notice" id="notice"></div>
+
+  <div class="card center" id="done" style="display:none">
+    <h2>✅ ส่งใบสมัครเรียบร้อย · Submitted</h2>
+    <p class="hint">ขอบคุณที่สมัครงานกับเรา ทีมงานจะติดต่อกลับหากผ่านการพิจารณา</p>
+    <button class="btn" onclick="location.reload()">สมัครอีกคน · New application</button>
+  </div>
+
+  <form id="form">
+    <div class="card">
+      <h2>ข้อมูลส่วนตัว <small class="en">Personal Information</small></h2>
+      <p class="hint">ช่องที่มี <span class="req">*</span> จำเป็นต้องกรอก · Fields with * are required</p>
+
+      <div class="field center">
+        <label>รูปถ่ายผู้สมัคร <small class="en">Photo</small></label>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button type="button" class="btn secondary small" id="photoFileBtn">🖼️ เลือกรูป · Gallery</button>
+          <button type="button" class="btn secondary small" id="photoCamBtn">📷 ถ่ายรูป · Camera</button>
+        </div>
+        <input type="file" id="photo" accept="image/*" hidden>
+        <input type="file" id="photoCam" accept="image/*" capture="user" hidden>
+        <img class="preview" id="photoPreview" style="margin:10px auto 0">
+        <div class="muted" id="photoName" style="font-size:13px;margin-top:6px"></div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>ชื่อ-นามสกุล <span class="req">*</span> <small class="en">Full Name</small></label>
+          <input name="full_name" required>
+        </div>
+        <div class="field">
+          <label>ชื่อเล่น <small class="en">Nickname</small></label>
+          <input name="nickname">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>เพศ <small class="en">Gender</small></label>
+          <select name="gender">
+            <option value="">— เลือก · Select —</option>
+            <option value="ชาย">ชาย · Male</option>
+            <option value="หญิง">หญิง · Female</option>
+            <option value="อื่น ๆ">อื่น ๆ · Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>วันเกิด <small class="en">Date of Birth</small></label>
+          <input name="birth_date" type="date">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>เบอร์โทร <span class="req">*</span> <small class="en">Phone</small></label>
+          <input name="phone" required inputmode="tel">
+        </div>
+        <div class="field">
+          <label>อีเมล / ไลน์ไอดี <small class="en">Email / Line ID</small></label>
+          <input name="email">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>ที่อยู่ปัจจุบัน <small class="en">Current Address</small></label>
+        <textarea name="address"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>สัญชาติและเอกสาร <small class="en">Nationality & Documents</small></h2>
+      <p class="hint">คนไทยกรอกเลขบัตรประชาชน · แรงงานต่างด้าวกรอกพาสปอร์ต/ใบอนุญาตทำงาน</p>
+
+      <div class="row">
+        <div class="field">
+          <label>สัญชาติ <small class="en">Nationality</small></label>
+          <select name="nationality" id="nationality">
+            <option value="ไทย">ไทย · Thai</option>
+            <option value="เมียนมา">เมียนมา · Myanmar</option>
+            <option value="กัมพูชา">กัมพูชา · Cambodian</option>
+            <option value="ลาว">ลาว · Lao</option>
+            <option value="เวียดนาม">เวียดนาม · Vietnamese</option>
+            <option value="อื่น ๆ">อื่น ๆ · Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>เลขบัตรประชาชน <small class="en">National ID (Thai)</small></label>
+          <input name="national_id" inputmode="numeric">
+        </div>
+      </div>
+
+      <div id="foreignBox" style="display:none">
+        <div class="row">
+          <div class="field">
+            <label>เลขหนังสือเดินทาง <small class="en">Passport No.</small></label>
+            <input name="passport_no">
+          </div>
+          <div class="field">
+            <label>วันหมดอายุหนังสือเดินทาง <small class="en">Passport Expiry</small></label>
+            <input name="passport_expiry" type="date">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>เลขใบอนุญาตทำงาน <small class="en">Work Permit No.</small></label>
+            <input name="work_permit_no">
+          </div>
+          <div class="field">
+            <label>วันหมดอายุใบอนุญาตทำงาน <small class="en">Work Permit Expiry</small></label>
+            <input name="work_permit_expiry" type="date">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>ตำแหน่งที่สมัคร <small class="en">Position Applied</small></h2>
+      <div class="row">
+        <div class="field">
+          <label>ตำแหน่ง <small class="en">Position</small></label>
+          <select name="position" id="position"></select>
+        </div>
+        <div class="field">
+          <label>เงินเดือนที่คาดหวัง (บาท) <small class="en">Expected Salary</small></label>
+          <input name="expected_salary" type="number" min="0" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field">
+        <label>เริ่มงานได้เมื่อ <small class="en">Available Start Date</small></label>
+        <input name="start_date" type="date">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>ประวัติการทำงาน <small class="en">Work Experience</small></h2>
+      <p class="hint">ไม่บังคับ · เพิ่มได้หลายรายการ · Optional, add multiple</p>
+      <div id="expList"></div>
+      <button type="button" class="btn secondary small" id="addExp">+ เพิ่มประสบการณ์ · Add</button>
+    </div>
+
+    <div class="card">
+      <h2>เอกสารแนบ <small class="en">Documents</small></h2>
+      <p class="hint">แนบสำเนาเอกสารที่เกี่ยวข้อง · รองรับ PDF และรูปภาพ · ไม่บังคับ</p>
+      <div id="docSlots"></div>
+      <div class="field">
+        <label>เอกสารอื่น ๆ <small class="en">Other documents — แนบได้หลายไฟล์</small></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="btn secondary small" id="otherFileBtn">📎 แนบไฟล์ · Files</button>
+          <button type="button" class="btn secondary small" id="otherCamBtn">📷 ถ่ายรูป/สแกน · Camera</button>
+        </div>
+        <input type="file" id="doc_other" multiple accept=".pdf,.doc,.docx,image/*" hidden>
+        <input type="file" id="doc_other_cam" accept="image/*" capture="environment" hidden>
+        <div id="otherList" class="muted" style="font-size:13px;margin-top:8px"></div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-block" id="submitBtn">ส่งใบสมัคร · Submit</button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="js/supabase-init.js"></script>
+<script src="js/apply.js"></script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

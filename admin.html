@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>หลังบ้าน — จัดการใบสมัคร</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <img src="icons/logo.png" class="brand-logo" alt="โลโก้">
+    <div>
+    <h1>ระบบจัดการใบสมัคร</h1>
+    <div class="sub" id="whoami"></div>
+    </div>
+  </div>
+  <button class="btn secondary small" id="logoutBtn" style="display:none">ออกจากระบบ</button>
+</div>
+
+<div class="container" id="loginView" style="display:none">
+  <div class="card" style="max-width:400px;margin:40px auto">
+    <h2>เข้าสู่ระบบผู้ดูแล</h2>
+    <p class="hint">สำหรับเจ้าหน้าที่เท่านั้น</p>
+    <div class="notice" id="loginNotice"></div>
+    <form id="loginForm">
+      <div class="field"><label>อีเมล</label><input type="email" id="email" required></div>
+      <div class="field"><label>รหัสผ่าน</label><input type="password" id="password" required></div>
+      <button class="btn btn-block" id="loginBtn">เข้าสู่ระบบ</button>
+    </form>
+  </div>
+</div>
+
+<div class="container-wide" id="appView" style="display:none">
+  <div class="notice" id="notice"></div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="card">
+    <div class="toolbar">
+      <input id="search" placeholder="ค้นหาชื่อ / เบอร์ / อีเมล">
+      <select id="fStatus">
+        <option value="">ทุกสถานะ</option>
+        <option value="new">ใหม่</option>
+        <option value="reviewing">กำลังพิจารณา</option>
+        <option value="interview">นัดสัมภาษณ์</option>
+        <option value="passed">ผ่าน</option>
+        <option value="rejected">ไม่ผ่าน</option>
+      </select>
+      <select id="fPosition"><option value="">ทุกตำแหน่ง</option></select>
+      <select id="fNationality"><option value="">ทุกสัญชาติ</option></select>
+      <button class="btn small" id="exportBtn">Export CSV</button>
+      <button class="btn secondary small" id="refreshBtn">รีเฟรช</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th data-sort="created_at">วันที่สมัคร</th>
+          <th data-sort="full_name">ชื่อ-นามสกุล</th>
+          <th data-sort="nationality">สัญชาติ</th>
+          <th data-sort="position">ตำแหน่ง</th>
+          <th data-sort="phone">เบอร์โทร</th>
+          <th data-sort="status">สถานะ</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="muted" id="count" style="margin-top:12px"></p>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="js/supabase-init.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/admin-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>รับสมัครงาน — QR Code</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <img src="icons/logo.png" class="brand-logo" alt="โลโก้">
+    <div>
+    <h1 id="company">รับสมัครงาน</h1>
+    <div class="sub" id="tagline"></div>
+    </div>
+  </div>
+  <a class="btn secondary small" href="admin.html">เข้าหลังบ้าน</a>
+</div>
+
+<div class="container">
+  <div class="card center">
+    <img src="icons/logo-full.png" class="hero-logo" alt="ConnectHR">
+    <h2>สแกนเพื่อสมัครงาน</h2>
+    <p class="hint">ให้ผู้สมัครสแกน QR Code นี้ หรือส่งลิงก์ด้านล่างให้ทางไลน์/อีเมล</p>
+    <div id="qrbox"><canvas id="qr"></canvas></div>
+
+    <div class="url-box">
+      <input id="applyUrl" readonly>
+      <button class="btn small" id="copyBtn">คัดลอก</button>
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a class="btn" id="openApply" href="apply.html">เปิดหน้าสมัคร</a>
+      <button class="btn secondary" id="dlBtn">ดาวน์โหลด QR</button>
+      <button class="btn secondary" id="printBtn">พิมพ์โปสเตอร์</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>วิธีใช้งาน</h2>
+    <p class="hint" style="margin:0">
+      1) ติดตั้งค่า Supabase ในไฟล์ <code>config.js</code> และรัน <code>supabase/schema.sql</code><br>
+      2) นำโปรเจกต์ขึ้นโฮสต์ (Netlify / Vercel / GitHub Pages) เพื่อให้ได้ URL จริง<br>
+      3) พิมพ์ QR ติดหน้าร้าน หรือส่งลิงก์ให้ผู้สมัคร<br>
+      4) ดูและจัดการใบสมัครที่หน้า “เข้าหลังบ้าน”
+    </p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="config.js"></script>
+<script>
+  document.getElementById("company").textContent = APP_CONFIG.COMPANY_NAME + " — รับสมัครงาน";
+  document.getElementById("tagline").textContent = APP_CONFIG.TAGLINE;
+
+  var applyUrl = new URL("apply.html", location.href).href;
+  document.getElementById("applyUrl").value = applyUrl;
+
+  new QRCode(document.getElementById("qr"), {
+    text: applyUrl, width: 240, height: 240,
+    colorDark: "#1f2933", colorLight: "#ffffff"
+  });
+
+  document.getElementById("copyBtn").onclick = function () {
+    navigator.clipboard.writeText(applyUrl);
+    document.getElementById("copyBtn").textContent = "คัดลอกแล้ว";
+    setTimeout(function(){ document.getElementById("copyBtn").textContent = "คัดลอก"; }, 1500);
+  };
+
+  document.getElementById("dlBtn").onclick = function () {
+    var img = document.querySelector("#qr img") || document.querySelector("#qr canvas");
+    var a = document.createElement("a");
+    a.href = (img.tagName === "IMG") ? img.src : img.toDataURL("image/png");
+    a.download = "qr-recruit.png"; a.click();
+  };
+
+  document.getElementById("printBtn").onclick = function(){ window.print(); };
+
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
