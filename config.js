@@ -3,8 +3,8 @@
 //  เอาค่ามาจาก:  Supabase Dashboard > Project Settings > API
 // ============================================================
 window.APP_CONFIG = {
-  SUPABASE_URL: "https://YOUR-PROJECT-ref.supabase.co",
-  SUPABASE_ANON_KEY: "YOUR-ANON-PUBLIC-KEY",
+  SUPABASE_URL: "https://svmkomrwwnkxexbkzdai.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_dnXb0rirHoc3nr_TqGG1pA_TEF4ovyC",
 
   // ชื่อบริษัท/ตำแหน่งที่แสดงบนหน้าเว็บ (แก้ได้ตามต้องการ)
   COMPANY_NAME: "ConnectHR",
