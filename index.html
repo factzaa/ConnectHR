@@ -25,7 +25,7 @@
     <img src="icons/logo-full.png" class="hero-logo" alt="ConnectHR">
     <h2>สแกนเพื่อสมัครงาน</h2>
     <p class="hint">ให้ผู้สมัครสแกน QR Code นี้ หรือส่งลิงก์ด้านล่างให้ทางไลน์/อีเมล</p>
-    <div id="qrbox"><canvas id="qr"></canvas></div>
+    <div id="qrbox"><div id="qr"></div></div>
 
     <div class="url-box">
       <input id="applyUrl" readonly>
@@ -45,36 +45,63 @@
       1) ติดตั้งค่า Supabase ในไฟล์ <code>config.js</code> และรัน <code>supabase/schema.sql</code><br>
       2) นำโปรเจกต์ขึ้นโฮสต์ (Netlify / Vercel / GitHub Pages) เพื่อให้ได้ URL จริง<br>
       3) พิมพ์ QR ติดหน้าร้าน หรือส่งลิงก์ให้ผู้สมัคร<br>
-      4) ดูและจัดการใบสมัครที่หน้า “เข้าหลังบ้าน”
+      4) ดูและจัดการใบสมัครที่หน้า "เข้าหลังบ้าน"
     </p>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="config.js"></script>
 <script>
-  document.getElementById("company").textContent = APP_CONFIG.COMPANY_NAME + " — รับสมัครงาน";
-  document.getElementById("tagline").textContent = APP_CONFIG.TAGLINE;
-
+  // URL หน้าสมัคร (อ้างอิงจากที่ตั้งไฟล์จริง — ใช้ได้ทั้ง Netlify/Vercel/GitHub Pages)
   var applyUrl = new URL("apply.html", location.href).href;
+
+  document.getElementById("company").textContent = (APP_CONFIG.COMPANY_NAME || "") + " — รับสมัครงาน";
+  document.getElementById("tagline").textContent = APP_CONFIG.TAGLINE || "";
   document.getElementById("applyUrl").value = applyUrl;
 
-  new QRCode(document.getElementById("qr"), {
-    text: applyUrl, width: 240, height: 240,
-    colorDark: "#1f2933", colorLight: "#ffffff"
-  });
+  // สำรอง: ถ้าไลบรารี QR โหลดไม่ได้ ใช้รูป QR จาก API แทน
+  function qrFallback(){
+    document.getElementById("qr").innerHTML =
+      '<img alt="QR Code" width="240" height="240" ' +
+      'src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=' +
+      encodeURIComponent(applyUrl) + '">';
+  }
+
+  function makeQR(){
+    var box = document.getElementById("qr");
+    if (window.QRCode) {
+      try {
+        new QRCode(box, { text: applyUrl, width: 240, height: 240,
+          colorDark: "#183050", colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M });
+        return;
+      } catch (e) { /* ตกไปใช้สำรอง */ }
+    }
+    qrFallback();
+  }
+
+  // โหลดไลบรารี QR จาก CDN ที่มีจริง (cdnjs) แล้วค่อยสร้าง — ถ้าโหลดไม่ได้ใช้สำรอง
+  var qrLib = document.createElement("script");
+  qrLib.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  qrLib.onload = makeQR;
+  qrLib.onerror = qrFallback;
+  document.head.appendChild(qrLib);
+  // กันเหนียว: ถ้า 4 วินาทีแล้วยังไม่มี QR ให้ใช้สำรอง
+  setTimeout(function(){ if(!document.getElementById("qr").hasChildNodes()) qrFallback(); }, 4000);
 
   document.getElementById("copyBtn").onclick = function () {
     navigator.clipboard.writeText(applyUrl);
-    document.getElementById("copyBtn").textContent = "คัดลอกแล้ว";
-    setTimeout(function(){ document.getElementById("copyBtn").textContent = "คัดลอก"; }, 1500);
+    var b = document.getElementById("copyBtn");
+    b.textContent = "คัดลอกแล้ว"; setTimeout(function(){ b.textContent = "คัดลอก"; }, 1500);
   };
 
   document.getElementById("dlBtn").onclick = function () {
-    var img = document.querySelector("#qr img") || document.querySelector("#qr canvas");
+    var img = document.querySelector("#qr img");
+    var cv = document.querySelector("#qr canvas");
     var a = document.createElement("a");
-    a.href = (img.tagName === "IMG") ? img.src : img.toDataURL("image/png");
-    a.download = "qr-recruit.png"; a.click();
+    a.href = img ? img.src : (cv ? cv.toDataURL("image/png") : "");
+    if (!a.href) return;
+    a.download = "qr-recruit.png"; a.target = "_blank"; a.click();
   };
 
   document.getElementById("printBtn").onclick = function(){ window.print(); };
