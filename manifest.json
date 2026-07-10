@@ -2,7 +2,7 @@
   "name": "ระบบรับสมัครงาน",
   "short_name": "สมัครงาน",
   "description": "กรอกใบสมัครงานออนไลน์",
-  "start_url": "apply.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#f6f1e6",
   "theme_color": "#1e5f8c",
@@ -19,5 +19,6 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "scope": "./"
 }
