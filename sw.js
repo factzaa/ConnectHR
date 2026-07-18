@@ -1,5 +1,5 @@
 // Service Worker — cache หน้า static เพื่อให้เปิดได้เร็ว/ออฟไลน์บางส่วน
-const CACHE = "recruit-pwa-v5";
+const CACHE = "recruit-pwa-v6";
 const ASSETS = [
   "./", "index.html", "apply.html",
   "css/style.css", "config.js",
