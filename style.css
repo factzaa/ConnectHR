@@ -1,0 +1,159 @@
+:root{
+  --bg:#f6f1e6; --card:#fff; --ink:#183050; --muted:#5f7089;
+  --brand:#1e5f8c; --brand-dark:#184878; --brand-navy:#183060;
+  --accent:#3fa6bf; --accent-2:#f4a72c;
+  --line:#e7e2d5;
+  --ok:#059669; --warn:#d97706; --danger:#dc2626; --radius:14px;
+  --shadow:0 4px 20px rgba(24,60,110,.08);
+  --tap:48px;                      /* ขนาดแตะขั้นต่ำบนมือถือ */
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Segoe UI",-apple-system,"Sarabun","Noto Sans Thai",system-ui,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.55;
+  -webkit-tap-highlight-color:transparent;
+}
+a{color:var(--brand);text-decoration:none}
+.container{max-width:720px;margin:0 auto;padding:16px 14px calc(90px + var(--safe-b))}
+.container-wide{max-width:1200px;margin:0 auto;padding:16px 14px 60px}
+
+/* Header — ติดขอบบน */
+.topbar{position:sticky;top:0;z-index:30;color:var(--ink);background:#fff;
+  padding:9px 16px;padding-top:calc(9px + env(safe-area-inset-top,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(24,72,120,.07)}
+.topbar h1{font-size:16.5px;margin:0;font-weight:800;color:var(--brand-navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .sub{font-size:12px;color:var(--muted)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand>div{min-width:0}
+.brand-logo{height:34px;width:auto;flex:0 0 auto}
+.hero-logo{display:block;width:48%;max-width:150px;height:auto;margin:0 auto 10px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:17px}
+.card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:14.5px;font-weight:600;margin-bottom:6px}
+.field .req{color:var(--danger)}
+.field label small.en,h2 small.en{font-weight:400;color:var(--muted);font-size:12px}
+.kv .k small{font-weight:400;color:#9aa3af;font-size:11px}
+
+/* ช่องกรอก — ใหญ่ แตะง่าย + กันซูมบน iOS (ต้อง >=16px) */
+input,select,textarea{
+  width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;
+  font:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:var(--tap);
+  transition:border .15s,box-shadow .15s;-webkit-appearance:none;appearance:none
+}
+select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236b7280' d='M1 1l5 5 5-5'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);
+  box-shadow:0 0 0 3px rgba(30,95,140,.20)}
+textarea{min-height:88px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+
+.file-drop{border:1.5px dashed #cbd5e1;border-radius:12px;padding:16px;text-align:center;
+  color:var(--muted);font-size:14px;cursor:pointer;background:#fafbff;min-height:var(--tap)}
+.file-drop.filled{border-color:var(--ok);color:var(--ok);background:#f0fdf4}
+.preview{max-width:120px;max-height:120px;border-radius:10px;margin-top:10px;display:none}
+
+.group{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;
+  background:#fbfcfe;position:relative}
+.group .del{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--danger);
+  cursor:pointer;font-size:13px;width:auto;padding:6px 10px;min-height:auto}
+
+/* ปุ่ม — ใหญ่พอสำหรับนิ้ว */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 18px;border:none;border-radius:12px;font:inherit;font-weight:600;font-size:15px;
+  cursor:pointer;background:var(--brand);color:#fff;transition:background .15s,transform .05s;
+  width:auto;min-height:var(--tap)}
+.btn:active{transform:scale(.98)}
+.btn:hover{background:var(--brand-dark)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.secondary:hover{background:#f3f4f6}
+.btn.ghost{background:transparent;color:var(--brand);padding:10px 12px}
+.btn.small{padding:10px 14px;font-size:14px;min-height:42px}
+.btn-block{width:100%}
+
+/* ปุ่มส่งใบสมัคร — ลอยติดล่างจอบนมือถือ กดง่ายด้วยนิ้วโป้ง */
+#submitBtn{width:100%;font-size:16px;padding:15px;box-shadow:0 6px 18px rgba(24,72,120,.28)}
+@media(max-width:640px){
+  #submitBtn{position:sticky;bottom:calc(12px + var(--safe-b));z-index:20}
+}
+
+.badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600}
+.badge.new{background:#dbeafe;color:#1e40af}
+.badge.reviewing{background:#fef3c7;color:#92400e}
+.badge.interview{background:#ede9fe;color:#5b21b6}
+.badge.passed{background:#d1fae5;color:#065f46}
+.badge.rejected{background:#fee2e2;color:#991b1b}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.toolbar input,.toolbar select{width:auto;min-width:150px;flex:1}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+th,td{padding:12px;text-align:left;font-size:14px;border-bottom:1px solid var(--line)}
+th{background:#f8fafc;font-weight:700;color:#475569;cursor:pointer;white-space:nowrap}
+tbody tr:hover{background:#f8fafc;cursor:pointer}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+
+/* รูปผู้สมัครในตาราง (thumbnail กลม) */
+.avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+  border:1px solid var(--line);background:#eef2f7;
+  display:inline-flex;align-items:center;justify-content:center;
+  color:#5f7089;font-weight:700;font-size:14px;overflow:hidden}
+img.avatar{display:block}
+th:first-child,td:first-child{width:56px}
+
+/* ตารางหลังบ้าน -> การ์ดบนมือถือ */
+@media(max-width:640px){
+  .toolbar input,.toolbar select{min-width:0;flex:1 1 46%}
+  .table-wrap{border:none}
+  table{background:transparent}
+  thead{position:absolute;left:-9999px}
+  tbody tr{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;
+    margin-bottom:10px;padding:6px 12px;box-shadow:var(--shadow)}
+  tbody td{display:flex;justify-content:space-between;gap:14px;align-items:center;
+    border:none;border-bottom:1px dashed var(--line);padding:9px 0;font-size:14.5px}
+  tbody td:last-child{border-bottom:none}
+  tbody td:first-child{width:auto}
+  tbody td::before{content:attr(data-label);color:var(--muted);font-weight:600;
+    font-size:12.5px;flex:0 0 auto}
+}
+
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;
+  align-items:center;justify-content:center;padding:16px;z-index:50}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:640px;width:100%;max-height:90vh;
+  overflow:auto;padding:22px}
+.modal h3{margin:0 0 12px}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;font-size:14px;margin-bottom:14px}
+.kv .k{color:var(--muted)}
+@media(max-width:560px){.kv{grid-template-columns:120px 1fr}}
+/* บนมือถือ modal เป็นแบบ bottom-sheet */
+@media(max-width:640px){
+  .overlay{align-items:flex-end;padding:0}
+  .modal{max-width:100%;border-radius:18px 18px 0 0;max-height:94vh;
+    padding:20px 16px calc(20px + var(--safe-b))}
+}
+
+.notice{padding:12px 14px;border-radius:10px;font-size:14px;margin-bottom:14px;display:none}
+.notice.ok{background:#f0fdf4;color:#065f46;border:1px solid #bbf7d0}
+.notice.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.center{text-align:center}
+.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.stat .n{font-size:22px;font-weight:800}
+.stat .l{font-size:12px;color:var(--muted)}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid #fff;
+  border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#qrbox{display:flex;justify-content:center;padding:18px;background:#fff;border-radius:12px}
+.url-box{display:flex;gap:8px;margin-top:12px}
+.url-box input{font-family:monospace;font-size:13px}
