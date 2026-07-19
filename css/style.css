@@ -102,6 +102,14 @@ th{background:#f8fafc;font-weight:700;color:#475569;cursor:pointer;white-space:n
 tbody tr:hover{background:#f8fafc;cursor:pointer}
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
 
+/* รูปผู้สมัครในตาราง (thumbnail กลม) */
+.avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+  border:1px solid var(--line);background:#eef2f7;
+  display:inline-flex;align-items:center;justify-content:center;
+  color:#5f7089;font-weight:700;font-size:14px;overflow:hidden}
+img.avatar{display:block}
+th:first-child,td:first-child{width:56px}
+
 /* ตารางหลังบ้าน -> การ์ดบนมือถือ */
 @media(max-width:640px){
   .toolbar input,.toolbar select{min-width:0;flex:1 1 46%}
@@ -113,6 +121,7 @@ tbody tr:hover{background:#f8fafc;cursor:pointer}
   tbody td{display:flex;justify-content:space-between;gap:14px;align-items:center;
     border:none;border-bottom:1px dashed var(--line);padding:9px 0;font-size:14.5px}
   tbody td:last-child{border-bottom:none}
+  tbody td:first-child{width:auto}
   tbody td::before{content:attr(data-label);color:var(--muted);font-weight:600;
     font-size:12.5px;flex:0 0 auto}
 }

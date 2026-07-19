@@ -86,6 +86,7 @@ function render() {
   const rows = filtered();
   const html = rows.map(r => `
     <tr data-id="${r.id}">
+      <td data-label="รูป">${avatarCell(r)}</td>
       <td data-label="วันที่สมัคร">${fmtDate(r.created_at)}</td>
       <td data-label="ชื่อ-นามสกุล"><strong>${r.full_name || "-"}</strong></td>
       <td data-label="สัญชาติ">${r.nationality || "-"}</td>
@@ -93,10 +94,53 @@ function render() {
       <td data-label="เบอร์โทร">${r.phone || "-"}</td>
       <td data-label="สถานะ"><span class="badge ${r.status}">${STATUS[r.status] || r.status}</span></td>
     </tr>`).join("");
-  $("#rows").innerHTML = html || `<tr><td colspan="6" class="center muted" style="padding:30px">ไม่พบข้อมูล</td></tr>`;
+  $("#rows").innerHTML = html || `<tr><td colspan="7" class="center muted" style="padding:30px">ไม่พบข้อมูล</td></tr>`;
   $("#count").textContent = `แสดง ${rows.length} จาก ${allRows.length} รายการ`;
   document.querySelectorAll("#rows tr[data-id]").forEach(tr => {
     tr.onclick = () => openDetail(tr.dataset.id);
+  });
+  hydratePhotos(rows);
+}
+
+// ---------- รูปผู้สมัคร (thumbnail ในตาราง) ----------
+const photoUrlCache = new Map();   // photo_path -> signed URL (cache กัน request ซ้ำ)
+
+function initials(name) {
+  const p = (name || "").trim().split(/\s+/);
+  return ((p[0]?.[0] || "") + (p[1]?.[0] || "")).toUpperCase() || "?";
+}
+
+// คืน HTML ของช่องรูป: ถ้ามี URL ใน cache แสดงรูปเลย ไม่งั้นแสดงตัวย่อไว้ก่อน
+function avatarCell(r) {
+  const cached = r.photo_path ? photoUrlCache.get(r.photo_path) : null;
+  if (cached) return `<img class="avatar" src="${cached}" alt="รูปผู้สมัคร" loading="lazy">`;
+  const dp = r.photo_path ? ` data-path="${r.photo_path}"` : "";
+  return `<span class="avatar avatar-ph"${dp}>${initials(r.full_name)}</span>`;
+}
+
+// โหลด signed URL ของรูปที่ยังไม่มีใน cache แบบ batch แล้วแทนที่ placeholder ในตาราง
+async function hydratePhotos(rows) {
+  const paths = [...new Set(
+    rows.map(r => r.photo_path).filter(Boolean).filter(p => !photoUrlCache.has(p))
+  )];
+  if (paths.length) {
+    try {
+      const { data } = await sb.storage.from(cfg.STORAGE_BUCKET).createSignedUrls(paths, 3600);
+      (data || []).forEach((d, i) => {
+        const url = d && d.signedUrl;
+        if (url) photoUrlCache.set(paths[i], url);
+      });
+    } catch (e) { console.warn("โหลดรูปไม่สำเร็จ", e); }
+  }
+  document.querySelectorAll("#rows .avatar-ph[data-path]").forEach(el => {
+    const url = photoUrlCache.get(el.dataset.path);
+    if (!url) return;
+    const img = new Image();
+    img.className = "avatar";
+    img.src = url;
+    img.alt = "รูปผู้สมัคร";
+    img.loading = "lazy";
+    el.replaceWith(img);
   });
 }
 
